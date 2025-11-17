@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Corsica Ferries RBLX - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+   <link rel="icon" href="testafavicon.png" type="image/png">
+</head>
+
+
+<body>
+  <!-- BANNER FANMADE -->
+  <div class="fanmade-banner">
+    Progetto fan-made ispirato alla compagnia. Non affiliato con Forship S.P.A. (Corsica Ferries).  </div>
+
+  <!-- HEADER IDENTICO -->
+<header class="main-header">
+<div class="header-left">
+  <a href="index.html" class="logo">
+    <img src="CorsicaFerriesGoYellow+RBLX.png" alt="Corsica Ferries RBLX Logo" class="logo-img">
+  </a>
+</div>
+
+  </div>
+
+  <div class="header-middle">
+    <nav class="header-nav"></nav>
+  </div>
+
+  <div class="header-right">
+    <nav class="header-nav secondary-nav">
+      <a href="chi-siamo.html">CHI SIAMO</a>
+      <a href="flotta.html">LA FLOTTA</a>
+      <a href="onboard.html">A BORDO</a>
+      <a href="discord.html">DISCORD</a>
+      <a href="gruppo.html">GRUPPO ROBLOX</a>
+
+      <a href="club.html" class="btn-club">
+        <img src="club-logo.png" class="club-icon">
+        <span>CORSICA CLUB</span>
+      </a>
+
+      <div class="nav-dropdown small">
+        <button class="nav-dropdown-btn">IT ▾</button>
+        <div class="nav-dropdown-menu">
+          <a href="../en/index.html">EN</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+  <!-- HERO -->
+  <main>
+    <section class="hero">
+        <!-- CAROSELLO -->
+  <div class="carousel">
+    <img src="Cet1.png" class="carousel-img active">
+    <img src="Ces1.png" class="carousel-img">
+    <img src="Lota1.png" class="carousel-img">
+    <img src="Cet2.png" class="carousel-img">
+    <img src="Cet3.png" class="carousel-img">
+  </div>
+
+      <div class="hero-inner">
+        <!-- BOX PRENOTAZIONE -->
+        <div class="booking-card">
+          <h2>PRENOTA IL TUO VIAGGIO</h2>
+
+          <div class="form-group">
+            <label for="traversata">Traversata</label>
+            <div class="select-wrapper">
+              <select id="traversata" name="traversata">
+                <option>Continente → Sardegna</option>
+                <option>Continente → Corsica</option>
+                <option>Continente → Elba</option>
+                <option>Elba → Corsica</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="andata">Andata</label>
+              <div class="input-with-icon">
+                <input type="date" id="andata" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="ritorno">Ritorno</label>
+              <div class="input-with-icon">
+                <input type="date" id="ritorno" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Prestazioni</label>
+            <div class="prestazioni-row">
+              <button class="pill-input">
+                <span class="pill-icon">👤</span>
+                <span>1</span>
+              </button>
+              <button class="pill-input">
+                <span class="pill-icon">🚗</span>
+                <span>0</span>
+              </button>
+              <button class="pill-input">
+                <span class="pill-icon">🐶</span>
+                <span>0</span>
+              </button>
+            </div>
+          </div>
+
+<button id="btn-search" class="btn-primary full-width">
+  RICERCARE
+</button>
+        </div>
+
+        <!-- BOX PROMO -->
+        <div class="promo-card">
+          <div class="promo-tag">
+            CORSICA · SARDEGNA · ELBA
+          </div>
+          <h3>E parti con noi nel mediterraneo!</h3>
+          <p>
+            Raggiungi le principali isole del mediterraneo grazie a noi. Corsica, Sardegna ed Elba ti aspettano!
+          </p>
+<button class="btn-secondary" onclick="window.location.href='destinazioni.html'">
+  SCOPRI LE DESTINAZIONI
+</button>
+
+        </div>
+      </div>
+
+      <!-- PUNTINI SLIDER (DECORATIVI) -->
+<div class="slider-controls">
+  <div class="slider-dots">
+    <span class="dot active" data-slide="0"></span>
+    <span class="dot" data-slide="1"></span>
+    <span class="dot" data-slide="2"></span>
+    <span class="dot" data-slide="3"></span>
+    <span class="dot" data-slide="4"></span>
+  </div>
+
+  <!-- Pulsante Play/Pausa -->
+  <button id="carousel-toggle" class="carousel-btn">⏸</button>
+</div>
+
+
+  <!-- Pulsante Play/Pausa -->
+  <button id="carousel-toggle" class="carousel-btn">⏸</button>
+ 
+    </section>
+
+    <!-- OFFERTE -->
+    <section class="offers-section">
+      <div class="container">
+        <h2>SALPA CON NOI PER <span>SARDEGNA, CORSICA ED ELBA</span></h2>
+
+        <div class="offers-grid">
+          <article class="offer-card">
+            <div class="offer-img" style="background-image: url('Interni1.png');"></div>
+            <div class="offer-body">
+              <h3>NAVI STILOSE, ACCOGLIENTI E VELOCI</h3>
+              <p>
+                Goditi la tua traversata a bordo delle nostre migliori navi.
+              </p>
+              <a href="flotta.html" class="offer-link">SCOPRI DI PIÙ →</a>
+            </div>
+          </article>
+
+          <article class="offer-card">
+            <div class="offer-img" style="background-image: url('Piombino1.png');"></div>
+            <div class="offer-body">
+              <h3>OLTRE 6 PORTI SERVITI</h3>
+              <p>
+                Scopri il porto più comodo per te per partire con noi.
+              </p>
+              <a href="destinazioni.html" class="offer-link">SCOPRI DI PIÙ →</a>
+            </div>
+          </article>
+
+          <article class="offer-card">
+            <div class="offer-img" style="background-image: url('Cet4.png');"></div>
+            <div class="offer-body">
+              <h3>BUON GUSTAIO? SALI A BORDO!</h3>
+              <p>
+                Con oltre 8 ristoranti a bordo, soddisfiamo tutti i palati!
+              </p>
+              <a href="onboard.html" class="offer-link">SCOPRI DI PIÙ →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER SEMPLICE -->
+  <footer class="main-footer">
+    <div class="container footer-inner">
+      <p>2025 © Corsica Sardinia Ferries RBLX – Progetto fanmade non ufficiale.</p>
+      <nav class="footer-nav">
+        <a href="legale.html">Note legali</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="contatti.html">Contatti</a>
+      </nav>
+    </div>
+  </footer>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll(".carousel-img");
+const dots = document.querySelectorAll(".dot");
+const toggleButton = document.getElementById("carousel-toggle");
+
+let isPlaying = true;
+let interval = setInterval(nextSlide, 5000);
+
+function showSlide(index) {
+  slides.forEach((s, i) => {
+    s.classList.toggle("active", i === index);
+  });
+  dots.forEach((d, i) => {
+    d.classList.toggle("active", i === index);
+  });
+  currentSlide = index;
+}
+
+function nextSlide() {
+  showSlide((currentSlide + 1) % slides.length);
+}
+
+// Click sui dot
+dots.forEach(dot => {
+  dot.addEventListener("click", () => {
+    showSlide(parseInt(dot.dataset.slide));
+  });
+});
+
+// Play/Pausa
+toggleButton.addEventListener("click", () => {
+  if (isPlaying) {
+    clearInterval(interval);       // Ferma il carosello
+    toggleButton.textContent = "▶️"; // Cambia icona
+  } else {
+    interval = setInterval(nextSlide, 5000); // Riparte
+    toggleButton.textContent = "⏸";
+  }
+  isPlaying = !isPlaying;
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btnSearch = document.getElementById("btn-search");
+
+  btnSearch.addEventListener("click", () => {
+    const tratta = document.getElementById("traversata").value;
+    const andata = document.getElementById("andata").value;
+    const ritorno = document.getElementById("ritorno").value;
+
+    const persone = document.querySelectorAll(".pill-input")[0].children[1].textContent;
+    const auto = document.querySelectorAll(".pill-input")[1].children[1].textContent;
+    const animali = document.querySelectorAll(".pill-input")[2].children[1].textContent;
+
+    const url =
+      `results.html?tratta=${encodeURIComponent(tratta)}&andata=${andata}` +
+      `&ritorno=${ritorno}&persone=${persone}&auto=${auto}&animali=${animali}`;
+
+    window.location.href = url;
+  });
+});
+</script>
+
+
+
+</body>
+</html>
