@@ -265,5 +265,20 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<script>
+  // Rileva lingua del browser
+  const lang = navigator.language || navigator.userLanguage;
+
+  // Se la lingua inizia con "it" → italiano
+  if (lang.toLowerCase().startsWith("it")) {
+    window.location.href = "/it/index.html";
+  } 
+  // Tutto il resto → inglese
+  else {
+    window.location.href = "/en/index.html";
+  }
+</script>
+
 </body>
 </html>
+
