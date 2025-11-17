@@ -45,5 +45,15 @@
   </div>
 </footer>
 
+<script>
+  const url = window.location.pathname;
+  if (url.startsWith('/en/')) {
+    window.location.href = '/en/404.html';
+  } else if (url.startsWith('/it/')) {
+    window.location.href = '/it/404.html';
+  }
+</script>
+<!-- fallback content qui -->
+  
 </body>
 </html>
