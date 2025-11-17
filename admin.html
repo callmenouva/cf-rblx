@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin – CF RBLX Ferries</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<header class="main-header">
+<div class="header-left">
+  <a href="index.html" class="logo">
+    <img src="CorsicaFerriesGoYellow+RBLX.png" alt="Corsica Ferries RBLX Logo" class="logo-img">
+  </a>
+</div>
+
+  <div class="header-right">
+    <a href="index.html" class="btn-primary">TORNA ALLA HOME</a>
+  </div>
+</header>
+
+<div class="container" style="padding:2rem 0;">
+  <h1 style="color:#001b4c;">Pannello Amministrazione</h1>
+  <p>Aggiungi, modifica o rimuovi traversate visualizzate dagli utenti.</p>
+
+  <!-- FORM AGGIUNTA -->
+  <div style="
+    background:white; padding:1.5rem; border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-top:2rem;">
+    
+    <h2 style="color:#001b4c; margin-bottom:1rem;">Aggiungi nuova traversata</h2>
+
+    <label>Linea (es. Livorno → Bastia)</label>
+    <input id="linea" type="text" class="admin-input">
+
+    <label>Nave (es. CET, CEX...)</label>
+    <input id="nave" type="text" class="admin-input">
+
+    <label>Data</label>
+    <input id="data" type="date" class="admin-input">
+
+    <label>Ora (es. 14:30)</label>
+    <input id="ora" type="time" class="admin-input">
+
+    <button class="btn-primary" style="margin-top:1rem;" onclick="addTraversata()">
+      AGGIUNGI TRAVERSATA
+    </button>
+  </div>
+
+  <!-- LISTA TRAVERSATE -->
+  <h2 style="color:#001b4c; margin-top:3rem;">Traversate esistenti</h2>
+  <div id="lista-traversate" style="margin-top:1rem;"></div>
+
+</div>
+
+<!-- FIREBASE SDK -->
+<script type="module">
+
+  // --- CONFIGURAZIONE FIREBASE ---
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { 
+    getFirestore, collection, addDoc, getDocs, deleteDoc, doc 
+  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyDcpOxQ3QHV88ORPFmCyed286Ju7s1-85A",
+  authDomain: "cf-rblx.firebaseapp.com",
+  projectId: "cf-rblx",
+  storageBucket: "cf-rblx.firebasestorage.app",
+  messagingSenderId: "28559962292",
+  appId: "1:28559962292:web:b72fc4246a0a0e841ea7e1"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const refTraversate = collection(db, "tratte");
+
+  // --- AGGIUNGI TRAVERSATA ---
+  window.addTraversata = async () => {
+    const linea = document.getElementById("linea").value;
+    const nave = document.getElementById("nave").value;
+    const data = document.getElementById("data").value;
+    const ora = document.getElementById("ora").value;
+
+    if (!linea || !nave || !data || !ora) {
+      alert("Compila tutti i campi!");
+      return;
+    }
+
+    await addDoc(refTraversate, {
+      linea,
+      nave,
+      data,
+      ora
+    });
+
+    alert("Traversata aggiunta!");
+    loadTraversate();
+  };
+
+  // --- CARICA TRAVERSATE ---
+  async function loadTraversate() {
+    const container = document.getElementById("lista-traversate");
+    container.innerHTML = "";
+
+    const snapshot = await getDocs(refTraversate);
+
+    snapshot.forEach(docu => {
+      const t = docu.data();
+
+      container.innerHTML += `
+      <div style="
+        background:white; padding:1rem; margin-bottom:1rem; 
+        border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
+
+        <h3 style="color:#001b4c;">${t.linea}</h3>
+        <p><strong>Nave:</strong> ${t.nave}</p>
+        <p><strong>Data:</strong> ${t.data}</p>
+        <p><strong>Ora:</strong> ${t.ora}</p>
+
+        <button class="btn-primary" style="background:#c62828;" onclick="deleteTraversata('${docu.id}')">
+          ELIMINA
+        </button>
+      </div>`;
+    });
+  }
+
+  // --- ELIMINA TRAVERSATA ---
+  window.deleteTraversata = async (id) => {
+    if (!confirm("Sei sicuro di voler eliminare questa traversata?")) return;
+
+    await deleteDoc(doc(refTraversate, id));
+    loadTraversate();
+  };
+
+  // Carica all'apertura
+  loadTraversate();
+
+</script>
+
+<style>
+  .admin-input {
+    width: 100%;
+    padding: 0.6rem;
+    margin: 0.4rem 0 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+  }
+</style>
+
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Corsica Ferries Booking - Risultati ricerca</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/assets/style.css" />
+
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcpOxQ3QHV88ORPFmCyed286Ju7s1-85A",
+      authDomain: "cf-rblx.firebaseapp.com",
+      projectId: "cf-rblx",
+      storageBucket: "cf-rblx.firebasestorage.app",
+      messagingSenderId: "28559962292",
+      appId: "1:28559962292:web:b72fc4246a0a0e841ea7e1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    window.db = getFirestore(app);
+  </script>
+
+</head>
+<body>
+
+  <!-- BANNER -->
+  <div class="fanmade-banner">
+    Progetto fan-made ispirato alla compagnia. Non affiliato con Forship S.P.A. (Corsica Ferries).
+  </div>
+
+  <!-- HEADER -->
+  <header class="main-header">
+<div class="header-left">
+  <a href="index.html" class="logo">
+    <img src="CorsicaFerriesGoYellow+RBLX.png" alt="Corsica Ferries RBLX Logo" class="logo-img">
+  </a>
+</div>
+    <div class="header-right">
+      <a href="index.html" class="btn-primary" style="border-radius:100px;">TORNA ALLA HOME</a>
+    </div>
+  </header>
+
+  <!-- STEPPER -->
+  <section class="stepper-bar">
+    <div class="container stepper-inner">
+      <div class="stepper-item active"><span class="step-label">SCELTA</span></div>
+      <span class="step-arrow">›</span>
+      <div class="stepper-item"><span class="step-label">PRESTAZIONI</span></div>
+      <span class="step-arrow">›</span>
+      <div class="stepper-item"><span class="step-label">DATI PASSEGGERI</span></div>
+      <span class="step-arrow">›</span>
+      <div class="stepper-item"><span class="step-label">PAGAMENTO</span></div>
+      <span class="step-arrow">›</span>
+      <div class="stepper-item"><span class="step-label">CONFERMA</span></div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="results-main">
+    <div class="container">
+
+      <!-- RIEPILOGO RICERCA -->
+      <section class="results-searchbar">
+        <div class="rs-row">
+
+          <div class="rs-group">
+            <label>Traversata</label>
+            <div class="rs-box" id="top-tratta">-</div>
+          </div>
+
+          <div class="rs-group">
+            <label>Andata</label>
+            <div class="rs-box" id="top-andata">-</div>
+          </div>
+
+          <div class="rs-group">
+            <label>Ritorno</label>
+            <div class="rs-box" id="top-ritorno">-</div>
+          </div>
+
+          <div class="rs-group">
+            <label>Prestazioni</label>
+            <div class="rs-box" id="top-prestazioni">-</div>
+          </div>
+
+          <button class="btn-primary rs-search-btn">RICERCARE</button>
+
+        </div>
+      </section>
+
+      <!-- AVVISO -->
+      <section class="rs-warning">
+        <div class="rs-warning-icon"><span>↺</span></div>
+        <p>
+          In base alla data selezionata, gli orari definitivi di alcune traversate vi saranno comunicati
+          al più tardi 4 settimane prima della partenza.
+        </p>
+      </section>
+
+      <!-- TRATTA -->
+      <section class="rs-route-header">
+        <div class="rs-route-title">
+          <span class="icon-ship"></span>
+          <h2 id="titolo-tratta">Tratta</h2>
+        </div>
+        <button class="calendar-link"><span class="icon-calendar"></span> Calendario</button>
+      </section>
+
+      <!-- DATE -->
+      <section class="rs-dates">
+        <button class="rs-date-arrow" id="dates-prev">‹</button>
+        <div class="rs-date-list" id="date-list"></div>
+        <button class="rs-date-arrow" id="dates-next">›</button>
+      </section>
+
+      <!-- RISULTATI -->
+      <section id="results-list" class="results-container"></section>
+
+      <p class="rs-price-note">Prezzi IVA inclusa per le prestazioni selezionate.</p>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <div class="container footer-inner">
+      <p>2025 © Nexus Group – Progetto fanmade non ufficiale.</p>
+      <nav class="footer-nav">
+        <a href="#">Note legali</a>
+        <a href="#">Privacy</a>
+        <a href="#">Contatti</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- SCRIPT RISULTATI COMPLETO -->
+  <script type="module">
+    import {
+      collection,
+      getDocs,
+      query,
+      where
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    //----------------------------------------------------------
+    // PARAMETRI URL
+    //----------------------------------------------------------
+
+    function getParams() {
+      const p = new URLSearchParams(window.location.search);
+      return {
+        tratta: p.get("tratta"),
+        andata: p.get("andata"),
+        ritorno: p.get("ritorno"),
+        persone: p.get("persone"),
+        auto: p.get("auto"),
+        animali: p.get("animali")
+      };
+      console.log("DATA FIREBASE:", t.data);
+    }
+
+    const data = getParams();
+
+    //----------------------------------------------------------
+    // INSERIMENTO INFO NELLA BARRA BLU
+    //----------------------------------------------------------
+
+    document.getElementById("top-tratta").textContent = data.tratta;
+    document.getElementById("top-andata").textContent = data.andata;
+    document.getElementById("top-ritorno").textContent = data.ritorno;
+    document.getElementById("titolo-tratta").textContent = data.tratta;
+    document.getElementById("top-prestazioni").textContent =
+      `${data.persone} pers, ${data.auto} auto, ${data.animali} animali`;
+
+    const resultsList = document.getElementById("results-list");
+
+    //----------------------------------------------------------
+    // CARICAMENTO TRATTE BASE
+    //----------------------------------------------------------
+
+    async function caricaTratte() {
+      resultsList.innerHTML = `<div class="loading">Caricamento...</div>`;
+
+      const col = collection(db, "tratte");
+      const q = query(
+  col,
+  where("linea", "==", data.tratta),
+  where("data", "==", data.andata)
+);
+      const snap = await getDocs(q);
+
+      if (snap.empty) {
+        resultsList.innerHTML = `
+          <div class="no-results">Nessuna traversata trovata per questa tratta.</div>
+        `;
+        return;
+      }
+
+      let html = "";
+      snap.forEach(doc => {
+        const t = doc.data();
+
+        html += `
+          <div class="result-card">
+            <div class="result-time">
+              <div class="result-hour">${t.ora}</div>
+              <div class="result-date">${t.data}</div>
+            </div>
+            <div class="result-route">
+              <h3>${t.linea}</h3>
+              <p>${t.nave}</p>
+            </div>
+            <div class="result-actions">
+              <button class="btn-primary">SELEZIONA</button>
+            </div>
+          </div>
+        `;
+      });
+
+      resultsList.innerHTML = html;
+    }
+
+    //----------------------------------------------------------
+    // SISTEMA DATE (IDENTICO A CF)
+    //----------------------------------------------------------
+
+    const dateList = document.getElementById("date-list");
+    let currentStart = 0;
+
+    function generateDates() {
+      const days = [];
+      const now = new Date();
+
+      for (let i = 0; i < 30; i++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() + i);
+        days.push(d);
+      }
+      return days;
+    }
+
+    const allDates = generateDates();
+
+    function renderDateSlider() {
+      dateList.innerHTML = "";
+
+      const slice = allDates.slice(currentStart, currentStart + 7);
+
+      slice.forEach(d => {
+        const iso = d.toISOString().split("T")[0];
+        const div = document.createElement("div");
+
+        div.className = "rs-date-item";
+        if (iso === data.andata) div.classList.add("active");
+
+        div.innerHTML = `
+          <div class="rs-date-day">${d.toLocaleDateString("it-IT",{weekday:"short"})}</div>
+          <div class="rs-date-num">${d.getDate()}</div>
+          <div class="rs-date-month">${d.toLocaleDateString("it-IT",{month:"short"})}</div>
+        `;
+
+        div.addEventListener("click", () => {
+          data.andata = iso;
+          document.getElementById("top-andata").textContent = iso;
+
+          document.querySelectorAll(".rs-date-item").forEach(el => el.classList.remove("active"));
+          div.classList.add("active");
+
+          filtraTrattePerData(iso);
+        });
+
+        dateList.appendChild(div);
+      });
+    }
+
+    document.getElementById("dates-next").addEventListener("click", () => {
+      if (currentStart < allDates.length - 7) {
+        currentStart++;
+        renderDateSlider();
+      }
+    });
+
+    document.getElementById("dates-prev").addEventListener("click", () => {
+      if (currentStart > 0) {
+        currentStart--;
+        renderDateSlider();
+      }
+    });
+
+    //----------------------------------------------------------
+    // FILTRO PER DATA SELEZIONATA
+    //----------------------------------------------------------
+
+    async function filtraTrattePerData(giornoISO) {
+      resultsList.innerHTML = `<div class="loading">Aggiornamento...</div>`;
+
+      const col = collection(db, "tratte");
+      const q = query(
+        col,
+        where("linea", "==", data.tratta),
+        where("data", "==", giornoISO)
+      );
+
+      const snap = await getDocs(q);
+
+      if (snap.empty) {
+        resultsList.innerHTML = `
+          <div class="no-results">Nessuna traversata trovata per questa data.</div>
+        `;
+        return;
+      }
+
+      let html = "";
+      snap.forEach(doc =>{
+        const t = doc.data();
+
+        html += `
+          <div class="result-card">
+            <div class="result-time">
+              <div class="result-hour">${t.ora}</div>
+              <div class="result-date">${t.data}</div>
+            </div>
+            <div class="result-route">
+              <h3>${t.linea}</h3>
+              <p>${t.nave}</p>
+            </div>
+            <div class="result-actions">
+              <button class="btn-primary">SELEZIONA</button>
+            </div>
+          </div>
+        `;
+      });
+
+      resultsList.innerHTML = html;
+    }
+
+    //----------------------------------------------------------
+    // AVVIO
+    //----------------------------------------------------------
+
+    caricaTratte();
+    renderDateSlider();
+
+  </script>
+
+</body>
+</html>
