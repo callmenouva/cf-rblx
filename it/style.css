@@ -370,9 +370,9 @@ input[type="date"] {
 .video-wrapper {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* Mantiene proporzione 16:9 */
+  padding-top: 56.25%; /* rapporto 16:9 */
   overflow: hidden;
-  border-radius: inherit; /* opzionale se la card ha angoli arrotondati */
+  border-radius: 12px; /* opzionale */
 }
 
 .video-wrapper iframe {
@@ -382,6 +382,7 @@ input[type="date"] {
   width: 100%;
   height: 100%;
 }
+
 
 /* SLIDER DOTS */
 .slider-dots {
@@ -1854,4 +1855,5 @@ input[type="date"] {
   }
 
 }
+
 
