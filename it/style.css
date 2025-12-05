@@ -1,3 +1,12 @@
+/* PROVA PLAYER YOUTUBE */
+
+.video-player {
+  height: auto;
+  background: none;
+  padding: 0;
+}
+
+
 /* RESET BASE */
 *,
 *::before,
@@ -1845,3 +1854,4 @@ input[type="date"] {
   }
 
 }
+
