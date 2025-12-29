@@ -117,7 +117,7 @@
             </div>
           </div>
 
-<button id="btn-search" class="btn-primary full-width">
+<button class="btn-secondary" onclick="window.location.href='Crossings.pdf'">
   RICERCARE
 </button>
         </div>
@@ -333,28 +333,6 @@ toggleButton.addEventListener("click", () => {
     toggleButton.textContent = "⏸";
   }
   isPlaying = !isPlaying;
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const btnSearch = document.getElementById("btn-search");
-
-  btnSearch.addEventListener("click", () => {
-    const tratta = document.getElementById("traversata").value;
-    const andata = document.getElementById("andata").value;
-    const ritorno = document.getElementById("ritorno").value;
-
-    const persone = document.querySelectorAll(".pill-input")[0].children[1].textContent;
-    const auto = document.querySelectorAll(".pill-input")[1].children[1].textContent;
-    const animali = document.querySelectorAll(".pill-input")[2].children[1].textContent;
-
-    const url =
-      `results.html?tratta=${encodeURIComponent(tratta)}&andata=${andata}` +
-      `&ritorno=${ritorno}&persone=${persone}&auto=${auto}&animali=${animali}`;
-
-    window.location.href = url;
-  });
 });
 </script>
 
