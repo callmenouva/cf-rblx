@@ -192,7 +192,7 @@
       <section class="offers-section">
       <div class="container">
         
-        <h2>THEY SAY ABOUT US</h2>
+        <h2>WHAT THEY SAY ABOUT US</h2>
 
 <article class="offer-card">
   <div class="video-player">
@@ -241,22 +241,6 @@
   <div class="offer-body">
     <h3>IS THIS THE BEST FERRY COMPANY?</h3>
     <p>Creator: MillsJ09</p>
-  </div>
-</article>
-
-<br>
-<br>        
-
-          <article class="offer-card">
-  <div class="video-player">
-    <div class="video-wrapper">
-<iframe width="1488" height="837" src="https://www.youtube.com/embed/FdtR_Dl3rog" title="🛳️ (Traversata in traghetto per veicoli ROBLOX) Corsica Sardegna Ferries | Bastia-Savona" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
-  </div>
-
-  <div class="offer-body">
-    <h3>(ROBLOX Ferry Crossing) Corsica Sardinia Ferries | Bastia-Savona</h3>
-    <p>Creator: GamerWei</p>
   </div>
 </article>
             
@@ -333,29 +317,6 @@ toggleButton.addEventListener("click", () => {
     toggleButton.textContent = "⏸";
   }
   isPlaying = !isPlaying;
-});
-</script>
-
-<!-- JS Booking -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const btnSearch = document.getElementById("btn-search");
-
-  btnSearch.addEventListener("click", () => {
-    const tratta = document.getElementById("traversata").value;
-    const andata = document.getElementById("andata").value;
-    const ritorno = document.getElementById("ritorno").value;
-
-    const persone = document.querySelectorAll(".pill-input")[0].children[1].textContent;
-    const auto = document.querySelectorAll(".pill-input")[1].children[1].textContent;
-    const animali = document.querySelectorAll(".pill-input")[2].children[1].textContent;
-
-    const url =
-      `results.html?tratta=${encodeURIComponent(tratta)}&andata=${andata}` +
-      `&ritorno=${ritorno}&persone=${persone}&auto=${auto}&animali=${animali}`;
-
-    window.location.href = url;
-  });
 });
 </script>
 
