@@ -1,3 +1,15 @@
+/* Colore di sfondo e testo della selezione */
+::selection {
+  background: #FFEC02; /* sfondo giallo personalizzato */
+  color: #000000;      /* colore testo nero */
+}
+
+/* Per Firefox */
+::-moz-selection {
+  background: #FFEC02;
+  color: #000000;
+}
+
 /* RESET BASE */
 *,
 *::before,
@@ -1826,4 +1838,5 @@ input[type="date"] {
   .offer-body p {
     font-size: 0.8rem;
   }
+
 }
