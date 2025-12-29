@@ -11,7 +11,7 @@
     },
     
     {
-      "data": "2026-1-5", 
+      "data": "2026-01-05", 
       "rotta": {
         "it": "Piombino → Porto-Vecchio",
         "en": "Piombino → Porto-Vecchio"
@@ -21,7 +21,7 @@
     },
     
     {
-      "data": "2026-1-10", 
+      "data": "2026-01-10", 
       "rotta": {
         "it": "Porto-Vecchio → Piombino",
         "en": "Porto-Vecchio → Piombino"
@@ -30,7 +30,7 @@
       "nave": "Pascal Lota"
     },
     {
-      "data": "2026-1-12", 
+      "data": "2026-01-12", 
       "rotta": {
         "it": "Piombino → Cavo",
         "en": "Piombino → Cavo"
@@ -40,7 +40,7 @@
     },
     
     {
-      "data": "2026-1-19", 
+      "data": "2026-01-19", 
       "rotta": {
         "it": "Piombino → Porto-Vecchio",
         "en": "Piombino → Porto-Vecchio"
@@ -50,7 +50,7 @@
     },
     
     {
-      "data": "2026-1-25", 
+      "data": "2026-01-25", 
       "rotta": {
         "it": "Portoferraio → Piombino",
         "en": "Portoferraio → Piombino"
@@ -62,3 +62,4 @@
   ]
 
 }
+
