@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Corsica Ferries RBLX - Booking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="testafavicon.png" type="image/png">
+</head>
+
+<body>
+
+  <!-- BANNER -->
+  <div class="fanmade-banner">
+    Fan-made project inspired by the company. Not affiliated with Forship S.P.A. (Corsica Ferries).
+  </div>
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="header-left">
+      <a href="index.html" class="logo">
+        <img src="CorsicaFerriesGoYellow+RBLX.png" alt="Corsica Ferries RBLX Logo" class="logo-img">
+      </a>
+    </div>
+    <div class="header-right">
+      <a href="/en/index.html" class="btn-primary" style="border-radius:100px;">BACK TO HOME</a>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="results-main">
+    <div class="container">
+
+      <!-- SUMMARY -->
+      <section class="results-searchbar">
+        <div class="rs-row">
+          <div class="rs-group">
+            <label>Crossing</label>
+            <div class="rs-box" id="top-tratta">-</div>
+          </div>
+
+          <div class="rs-group">
+            <label>Date</label>
+            <div class="rs-box" id="top-andata">-</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROUTE -->
+      <section class="rs-route-header">
+        <div class="rs-route-title">
+          <span class="icon-ship"></span>
+          <h2 id="titolo-tratta">Route</h2>
+        </div>
+      </section>
+
+      <!-- DATES -->
+      <section class="rs-dates">
+        <button class="rs-date-arrow" id="dates-prev">‹</button>
+        <div class="rs-date-list" id="date-list"></div>
+        <button class="rs-date-arrow" id="dates-next">›</button>
+      </section>
+
+      <!-- RESULTS -->
+      <section id="results-list" class="results-container"></section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <div class="container footer-inner">
+      <p>2025 © Corsica Sardinia Ferries RBLX – Unofficial fan-made project.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+  const data = (() => {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      tratta: p.get("tratta") || "All crossings",
+      andata: p.get("andata") || new Date().toISOString().split("T")[0]
+    };
+  })();
+
+  document.getElementById("top-tratta").textContent = data.tratta;
+  document.getElementById("top-andata").textContent = data.andata;
+  document.getElementById("titolo-tratta").textContent = data.tratta;
+
+  const resultsList = document.getElementById("results-list");
+  const dateList = document.getElementById("date-list");
+  let currentStart = 0;
+
+  /* --------------------------------------------------
+     LOAD CROSSINGS FROM JSON
+  -------------------------------------------------- */
+  let traversate = [];
+
+  async function caricaTraversate() {
+    try {
+      const jsonPath = "../traversate.json";
+      const res = await fetch(jsonPath);
+      const json = await res.json();
+      traversate = json.traversate;
+    } catch (e) {
+      console.error("Error loading crossings", e);
+      resultsList.innerHTML = "<div class='no-results'>Error loading data.</div>";
+    }
+  }
+
+  function formatDate(iso) {
+    const [y, m, d] = iso.split('-');
+    return `${d}-${m}-${y}`;
+  }
+
+  function mostraTraversate(dataISO) {
+    resultsList.innerHTML = "";
+    const filtrate = traversate.filter(t => t.data === dataISO);
+
+    if (!filtrate.length) {
+      resultsList.innerHTML = `<div class="no-results">No crossings available for this date.</div>`;
+      return;
+    }
+
+    filtrate.forEach(t => {
+      resultsList.innerHTML += `
+        <div class="result-card">
+          <div class="result-time">
+            <div class="result-hour">${t.ora}</div>
+            <div class="result-date">${formatDate(t.data)}</div>
+          </div>
+          <div class="result-route">
+            <h3>${t.rotta.en}</h3>
+            <p>${t.nave}</p>
+          </div>
+        </div>`;
+    });
+  }
+
+  function generateDates() {
+    return Array.from({ length: 100 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() + i);
+      return d;
+    });
+  }
+
+  const allDates = generateDates();
+
+  function renderDateSlider() {
+    dateList.innerHTML = "";
+    allDates.slice(currentStart, currentStart + 7).forEach(d => {
+      const iso = d.toISOString().split("T")[0];
+      const div = document.createElement("div");
+      div.className = "rs-date-item";
+      if (iso === data.andata) div.classList.add("active");
+
+      div.innerHTML = `
+        <div class="rs-date-day">${d.toLocaleDateString("en-GB",{weekday:"short"})}</div>
+        <div class="rs-date-num">${d.getDate()}</div>
+        <div class="rs-date-month">${d.toLocaleDateString("en-GB",{month:"short"})}</div>
+      `;
+
+      div.onclick = () => {
+        data.andata = iso;
+        document.getElementById("top-andata").textContent = formatDate(iso);
+        document.querySelectorAll(".rs-date-item").forEach(el => el.classList.remove("active"));
+        div.classList.add("active");
+        mostraTraversate(iso);
+      };
+
+      dateList.appendChild(div);
+    });
+  }
+
+  document.getElementById("dates-next").onclick = () => {
+    if (currentStart < allDates.length - 7) {
+      currentStart++;
+      renderDateSlider();
+    }
+  };
+
+  document.getElementById("dates-prev").onclick = () => {
+    if (currentStart > 0) {
+      currentStart--;
+      renderDateSlider();
+    }
+  };
+
+  (async () => {
+    await caricaTraversate();
+    renderDateSlider();
+    mostraTraversate(data.andata);
+  })();
+  </script>
+</body>
+</html>
