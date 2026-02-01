@@ -1,67 +1,68 @@
 {
   "traversate": [
     {
-      "data": "2025-12-29", 
+      "data": "2026-02-02", 
       "rotta": {
         "it": "Portoferraio → Piombino",
         "en": "Portoferraio → Piombino"
       },
       "ora": "21:30 GMT+1",
-      "nave": "Sardinia Express"
+      "nave": "Sardinia Regina"
     },
     
     {
-      "data": "2026-01-05", 
+      "data": "2026-02-04", 
       "rotta": {
-        "it": "Piombino → Porto-Vecchio",
-        "en": "Piombino → Porto-Vecchio"
+        "it": "Piombino → Portoferraio",
+        "en": "Piombino → Portoferraio"
       },
-      "ora": "19:00 GMT+1",
-      "nave": "Pascal Lota"
+      "ora": "21:30 GMT+1",
+      "nave": "Aethalia"
     },
     
     {
-      "data": "2026-01-10", 
+      "data": "2026-02-13", 
       "rotta": {
         "it": "Porto-Vecchio → Piombino",
         "en": "Porto-Vecchio → Piombino"
       },
-      "ora": "17:20 GMT+1",
-      "nave": "Pascal Lota"
+      "ora": "20:30 GMT+1",
+      "nave": "Corsica Express Three and Pascal Lota"
     },
     {
-      "data": "2026-01-12", 
+      "data": "2026-02-16", 
       "rotta": {
         "it": "Piombino → Cavo",
         "en": "Piombino → Cavo"
       },
       "ora": "20:00 GMT+1",
-      "nave": "Corsica Express Three"
+      "nave": "Corsica Express Seconda"
     },
     
     {
-      "data": "2026-01-19", 
+      "data": "2026-02-21", 
       "rotta": {
-        "it": "Piombino → Porto-Vecchio",
-        "en": "Piombino → Porto-Vecchio"
+        "it": "Portoferraio → Piombino",
+        "en": "Portoferraio → Piombino"
       },
-      "ora": "08:30 GMT+1",
+      "ora": "20:30 GMT+1",
       "nave": "Sardinia Express"
     },
     
     {
       "data": "2026-01-25", 
       "rotta": {
-        "it": "Portoferraio → Piombino",
-        "en": "Portoferraio → Piombino"
+        "it": "Ile Rousse → Savona",
+        "en": "Ile Rousse → Savona"
       },
-      "ora": "18:30 GMT+1",
-      "nave": "Aethalia"
+      "ora": "20:30 GMT+1",
+      "nave": "Pascal Lota"
     }
     
   ]
 
 }
+
 
 
 
