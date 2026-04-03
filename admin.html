@@ -1,88 +1,171 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Admin – CF RBLX Ferries</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-blue: #001b4c;
+      --accent-yellow: #ffde00;
+      --bg-light: #f4f7f9;
+      --text-main: #333;
+      --text-muted: #666;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    .main-header {
+      background: white;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .logo-img { height: 45px; }
+
+    .btn-nav-home {
+      background: var(--primary-blue);
+      color: white;
+      text-decoration: none;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: opacity 0.2s;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Form & UI components */
+    .admin-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      border-top: 6px solid var(--accent-yellow);
+      margin-bottom: 2rem;
+    }
+
+    .admin-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--primary-blue);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .admin-input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1.2rem;
+      border: 2px solid #eef2f7;
+      border-radius: 8px;
+      font-family: inherit;
+      box-sizing: border-box;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    .admin-input:focus {
+      border-color: var(--primary-blue);
+      outline: none;
+    }
+
+    .btn-action-primary {
+      background: var(--primary-blue);
+      color: var(--accent-yellow);
+      border: none;
+      border-radius: 8px;
+      padding: 1.1rem;
+      font-weight: 800;
+      font-size: 1rem;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-action-primary:hover {
+      background: #002e82;
+      box-shadow: 0 4px 15px rgba(0,27,76,0.2);
+    }
+
+    .btn-action-secondary {
+      background: var(--accent-yellow);
+      color: var(--primary-blue);
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .btn-past-edit { background: var(--primary-blue); color: white; border: none; border-radius: 4px; padding: 6px 14px; font-weight: 600; cursor: pointer; }
+    .btn-past-delete { background: #e51e1e; color: white; border: none; border-radius: 4px; padding: 6px 14px; font-weight: 600; cursor: pointer; }
+
+    /* Animations */
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+  </style>
 </head>
 
 <body>
 
-<header class="main-header">
-<div class="header-left">
-  <a href="index.html" class="logo">
-    <img src="CorsicaFerriesGoYellow+RBLX.png" alt="Corsica Ferries RBLX Logo" class="logo-img">
-  </a>
-</div>
-
-  <div class="header-right">
-    <a href="index.html" class="btn-primary">TORNA ALLA HOME</a>
-  </div>
-</header>
-
 <!-- LOGIN OVERLAY -->
-<div id="login-overlay" style="
-  position: fixed; inset: 0; background: #001b4c; z-index: 5000;
-  display: flex; align-items: center; justify-content: center; transition: all 0.5s ease;">
-  <div style="background: white; padding: 2.5rem; border-radius: 12px; width: min(400px, 90%); box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center;">
-     <img src="https://www.corsica-ferries.it/images/logo.png" style="width: 120px; margin-bottom: 1.5rem;" alt="Logo">
-     <h2 style="color: #001b4c; margin-top: 0; font-weight: 800;">Admin Login</h2>
-     <p style="color: #666; font-size: 0.9rem; margin-bottom: 2rem;">Please enter your credentials to manage crossings.</p>
-     
+<div id="login-overlay" style="position: fixed; inset: 0; background: #001b4c; z-index: 5000; display: flex; align-items: center; justify-content: center; transition: all 0.5s ease;">
+  <div style="background: white; padding: 3rem; border-radius: 16px; width: min(400px, 90%); box-shadow: 0 20px 60px rgba(0,0,0,0.4); text-align: center;">
+     <img src="https://www.corsica-ferries.it/images/logo.png" style="width: 130px; margin-bottom: 2rem;" alt="Logo">
+     <h2 style="color: #001b4c; margin-top: 0; font-weight: 800; letter-spacing: -0.5px;">Admin Login</h2>
+     <p style="color: #666; font-size: 0.9rem; margin-bottom: 2rem;">Authorized access only.</p>
      <div style="text-align: left;">
         <label class="admin-label">Username</label>
-        <input id="login-user" type="text" class="admin-input" placeholder="Enter username">
+        <input id="login-user" type="text" class="admin-input" placeholder="Username">
         <label class="admin-label">Password</label>
-        <input id="login-pass" type="password" class="admin-input" placeholder="Enter password">
+        <input id="login-pass" type="password" class="admin-input" placeholder="Password">
      </div>
-     
-     <button id="btn-login" class="btn-action-primary" style="margin-top: 1rem;">SIGN IN</button>
+     <button id="btn-login" class="btn-action-primary">SIGN IN</button>
   </div>
 </div>
 
-<!-- BOOTSTRAP HIDER -->
 <div id="main-content" style="opacity: 0; pointer-events: none; transition: opacity 0.5s ease;">
-
-<!-- CUSTOM MODAL -->
-<div id="custom-modal" style="
-  display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6);
-  z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-  <div style="background: white; padding: 2rem; border-radius: 12px; width: min(450px, 90%); box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
-     <h3 id="modal-title" style="color: #001b4c; margin-top: 0;">Modal Title</h3>
-     <p id="modal-desc" style="color: #555; font-size: 0.95rem; margin-bottom: 1.5rem;">Modal description goes here.</p>
-     <div id="modal-input-container" style="display:none; margin-bottom: 1.5rem;">
-        <input id="modal-input" type="text" class="admin-input" style="margin:0;">
-     </div>
-     <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <button id="modal-btn-cancel" class="btn-action-secondary" style="background: #eee; color: #333;">CANCEL</button>
-        <button id="modal-btn-confirm" class="btn-action-primary" style="margin-top:0; padding: 0.6rem 1.2rem; width: auto;">CONFIRM</button>
-     </div>
-  </div>
-</div>
-
-<!-- NOTIFICATION CONTAINER -->
-<div id="notification-container" style="
-  position: fixed; top: 20px; right: 20px; z-index: 1000;
-  display: flex; flex-direction: column; gap: 10px; pointer-events: none;">
-</div>
-
-<div class="container" style="padding:2rem 0;">
-  <h1 style="color:#001b4c; font-weight: 800; letter-spacing: -1px;">Crossing Management</h1>
-  <p style="color: #666; margin-bottom: 2rem;">Manage real-time departures and browse the trip archive.</p>
-
-  <!-- NEXT CROSSING FORM -->
-  <div style="background:white; padding:2rem; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border-top: 6px solid #ffde00;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-      <h2 style="color:#001b4c; margin: 0;">Next Crossing (LIVE)</h2>
-      <span style="background: #eef2f7; color: #001b4c; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">LIVE SYNC</span>
+  <header class="main-header">
+    <div class="header-left">
+      <img src="https://www.corsica-ferries.it/images/logo.png" style="height: 40px;" alt="Logo">
     </div>
+    <div class="header-right">
+      <a href="index.html" class="btn-nav-home">GO TO HOME SITE</a>
+    </div>
+  </header>
 
-    <div style="margin-bottom: 1.5rem;">
+  <div class="container">
+    <h1 style="color:var(--primary-blue); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 0.5rem;">Crossing Management</h1>
+    <p style="color: var(--text-muted); margin-bottom: 2.5rem; font-weight: 500;">Set live arrivals/departures and manage the historical trip archive.</p>
+
+    <!-- LIVE FORM -->
+    <div class="admin-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 style="color:var(--primary-blue); margin: 0; font-weight: 700; font-size: 1.25rem;">Live Departure (ROBLOX SYNC)</h2>
+        <span style="background: #eef2f7; color: var(--primary-blue); padding: 5px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.5px;">ACTIVE CONNECTION</span>
+      </div>
+
       <label class="admin-label">Route Selection</label>
       <select id="next-route" class="admin-input">
         <option value="" disabled selected>Select a route...</option>
@@ -95,83 +178,93 @@
         <option value="PIOMBINO - P.VECCHIO">PIOMBINO - P.VECCHIO</option>
         <option value="P.VECCHIO - PIOMBINO">P.VECCHIO - PIOMBINO</option>
       </select>
+
+      <label class="admin-label">Ferry / Vessel Name</label>
+      <input id="next-vessel" type="text" class="admin-input" placeholder="e.g. Sardinia Regina">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div>
+          <label class="admin-label">Trip Date</label>
+          <input id="next-date-input" type="date" class="admin-input" onchange="updateDateStrings()">
+        </div>
+        <div>
+          <label class="admin-label">Departure Time</label>
+          <input id="next-time" type="text" class="admin-input" placeholder="e.g. 21:00 GMT+2">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="opacity: 0.65;">
+          <label class="admin-label">Numeric Date</label>
+          <input id="next-dateNumbers" type="text" class="admin-input" readonly style="background: #f9f9f9;">
+        </div>
+        <div style="opacity: 0.65;">
+          <label class="admin-label">Formal Date</label>
+          <input id="next-dateLetters" type="text" class="admin-input" readonly style="background: #f9f9f9;">
+        </div>
+      </div>
+
+      <label class="admin-label">Additional Status Notes</label>
+      <input id="next-notes" type="text" class="admin-input" placeholder="e.g. On-time, delayed, etc.">
+
+      <button id="btn-save-next" class="btn-action-primary" style="margin-top: 1rem;">SAVE & PUSH TO GAME</button>
     </div>
 
-    <label class="admin-label">Vessel</label>
-    <input id="next-vessel" type="text" class="admin-input" placeholder="e.g. Corsica Express Three">
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-      <div>
-        <label class="admin-label">Travel Date</label>
-        <input id="next-date-input" type="date" class="admin-input" onchange="updateDateStrings()">
-      </div>
-      <div>
-        <label class="admin-label">Time</label>
-        <input id="next-time" type="text" class="admin-input" placeholder="e.g. 21:30 GMT+2">
-      </div>
+    <!-- ARCHIVE -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; margin-top: 4rem;">
+      <h2 style="color:var(--primary-blue); margin: 0; font-weight: 800; letter-spacing: -0.5px;">Trip Archive (Historical)</h2>
+      <button class="btn-action-secondary" onclick="addPastCrossing()">+ MANUAL ARCHIVE</button>
     </div>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-      <div style="opacity: 0.7;">
-        <label class="admin-label">Numeric Date (dateNumbers)</label>
-        <input id="next-dateNumbers" type="text" class="admin-input" readonly style="background: #f1f3f5; cursor: not-allowed; border-color: #ddd;">
-      </div>
-      <div style="opacity: 0.7;">
-        <label class="admin-label">Full Date (dateLetters)</label>
-        <input id="next-dateLetters" type="text" class="admin-input" readonly style="background: #f1f3f5; cursor: not-allowed; border-color: #ddd;">
-      </div>
-    </div>
-
-    <label class="admin-label">Trip Notes (Notes)</label>
-    <input id="next-notes" type="text" class="admin-input" placeholder="e.g. N/A or delay info">
-
-    <button id="btn-save-next" class="btn-action-primary" onclick="saveNextCrossing()">
-      SAVE AND UPDATE IN-GAME
-    </button>
+    
+    <div id="lista-past-crossings"></div>
   </div>
 
-  <!-- PAST CROSSINGS LIST -->
-  <h2 style="color:#001b4c; margin-top:4rem; margin-bottom: 1.5rem;">Past Crossings Archive</h2>
-  
-  <div style="background: #ffffff; padding: 1.2rem; border-radius: 12px; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eef2f7;">
-     <p style="margin:0; font-size: 0.95rem; color: #444;">Add a record to the history without touching the live data:</p>
-     <button class="btn-action-secondary" onclick="addPastCrossing()"> + ADD MANUALLY</button>
+  <!-- CUSTOM MODAL -->
+  <div id="custom-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+    <div style="background: white; padding: 2.5rem; border-radius: 16px; width: min(450px, 95%); box-shadow: 0 10px 40px rgba(0,0,0,0.25);">
+       <h3 id="modal-title" style="color: var(--primary-blue); margin-top: 0; font-weight: 800;">Modal</h3>
+       <p id="modal-desc" style="color: #555; font-size: 0.95rem; margin-bottom: 1.5rem;">Description.</p>
+       <div id="modal-input-container" style="display:none; margin-bottom: 1.5rem;">
+          <input id="modal-input" type="text" class="admin-input" style="margin:0;">
+       </div>
+       <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button id="modal-btn-cancel" style="background: #f0f0f0; color: #333; border: none; border-radius: 8px; padding: 0.7rem 1.4rem; font-weight: 700; cursor: pointer;">CANCEL</button>
+          <button id="modal-btn-confirm" class="btn-action-primary" style="width: auto; padding: 0.7rem 1.4rem; margin-top: 0;">CONFIRM</button>
+       </div>
+    </div>
   </div>
-  
-  <div id="lista-past-crossings" style="margin-top:1rem;"></div>
 
-</div>
+  <!-- TOASTS -->
+  <div id="notification-container" style="position: fixed; top: 25px; right: 25px; z-index: 6000; display: flex; flex-direction: column; gap: 12px; pointer-events: none;"></div>
 </div>
 
-<!-- FIREBASE SDK -->
 <script type="module">
-
-  // --- FIREBASE CONFIGURATION ---
+  // --- FIREBASE IMPORTS ---
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
   import { 
     getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc, setDoc, updateDoc, query, orderBy, where
   } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
   const firebaseConfig = {
-  apiKey: "AIzaSyDcpOxQ3QHV88ORPFmCyed286Ju7s1-85A",
-  authDomain: "cf-rblx.firebaseapp.com",
-  projectId: "cf-fest",
-  storageBucket: "cf-rblx.firebasestorage.app",
-  messagingSenderId: "28559962292",
-  appId: "1:28559962292:web:b72fc4246a0a0e841ea7e1"
+    apiKey: "AIzaSyDcpOxQ3QHV88ORPFmCyed286Ju7s1-85A",
+    authDomain: "cf-rblx.firebaseapp.com",
+    projectId: "cf-fest",
+    storageBucket: "cf-rblx.firebasestorage.app",
+    messagingSenderId: "28559962292",
+    appId: "1:28559962292:web:b72fc4246a0a0e841ea7e1"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // --- AUTH SYSTEM ---
+  // --- AUTH LOGIC ---
   async function performLogin() {
     const user = document.getElementById("login-user").value;
     const pass = document.getElementById("login-pass").value;
     const btn = document.getElementById("btn-login");
 
     if (!user || !pass) {
-        showNotification("Enter both username and password!", "error");
+        showNotification("Please fill in both fields.", "error");
         return;
     }
 
@@ -181,20 +274,15 @@
     try {
         const q = query(collection(db, "adminCredentials"), where("username", "==", user));
         const snapshot = await getDocs(q);
-        
         let authenticated = false;
-        snapshot.forEach(doc => {
-            if (doc.data().password === pass) {
-                authenticated = true;
-            }
-        });
+        snapshot.forEach(doc => { if (doc.data().password === pass) authenticated = true; });
 
         if (authenticated) {
             sessionStorage.setItem("adminAuth", "true");
-            showNotification("Access granted! Welcome back.");
+            showNotification("Access verified. Welcome back.");
             checkAuth();
         } else {
-            showNotification("Invalid credentials. Access denied.", "error");
+            showNotification("Invalid credentials.", "error");
         }
     } catch (e) {
         showNotification("Auth Error: " + e.message, "error");
@@ -206,8 +294,7 @@
 
   function checkAuth() {
     if (sessionStorage.getItem("adminAuth") === "true") {
-        document.getElementById("login-overlay").style.opacity = "0";
-        document.getElementById("login-overlay").style.pointerEvents = "none";
+        document.getElementById("login-overlay").style.display = "none";
         document.getElementById("main-content").style.opacity = "1";
         document.getElementById("main-content").style.pointerEvents = "auto";
         loadNextCrossing();
@@ -216,98 +303,51 @@
   }
 
   document.getElementById("btn-login").onclick = performLogin;
-  // Enter key support
   document.addEventListener("keypress", (e) => {
     if (e.key === "Enter" && sessionStorage.getItem("adminAuth") !== "true") performLogin();
   });
 
-  // --- NOTIFICATION SYSTEM (TOAST) ---
+  // --- UI & NOTIFICATIONS ---
   window.showNotification = (message, type = 'success') => {
     const container = document.getElementById("notification-container");
     const toast = document.createElement("div");
     const bgColor = type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3';
-    toast.className = "toast-message";
-    toast.style.cssText = `
-      background: ${bgColor}; color: white; padding: 12px 24px; border-radius: 8px;
-      font-weight: 600; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      pointer-events: auto; animation: slideIn 0.3s ease-out; cursor: pointer;
-      display: flex; align-items: center; gap: 10px; min-width: 250px;
-    `;
+    toast.style.cssText = `background: ${bgColor}; color: white; padding: 14px 28px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 10px 30px rgba(0,0,0,0.15); pointer-events: auto; animation: slideIn 0.3s ease-out; cursor: pointer; display: flex; align-items: center; min-width: 280px;`;
     toast.innerHTML = `<span>${message}</span>`;
     toast.onclick = () => toast.remove();
     container.appendChild(toast);
     setTimeout(() => {
       toast.style.animation = "slideOut 0.3s ease-in forwards";
-      setTimeout(() => toast.remove(), 300);
-    }, 4000);
+      setTimeout(() => toast.remove(), 350);
+    }, 4500);
   };
 
-  // --- CUSTOM MODAL SYSTEM ---
   let modalCallback = null;
-  function openModal(title, desc, confirmLabel, callback, showInput = false, initialInputValue = "") {
+  window.openModal = (title, desc, confirmLabel, callback, showInput = false, initialInputValue = "") => {
     document.getElementById("modal-title").innerText = title;
     document.getElementById("modal-desc").innerText = desc;
     document.getElementById("modal-btn-confirm").innerText = confirmLabel;
-    
     const inputContainer = document.getElementById("modal-input-container");
     const inputField = document.getElementById("modal-input");
-    
-    if (showInput) {
-        inputContainer.style.display = "block";
-        inputField.value = initialInputValue;
-        inputField.focus();
-    } else {
-        inputContainer.style.display = "none";
-    }
-
+    if (showInput) { inputContainer.style.display = "block"; inputField.value = initialInputValue; inputField.focus(); }
+    else { inputContainer.style.display = "none"; }
     modalCallback = callback;
     document.getElementById("custom-modal").style.display = "flex";
-  }
+  };
 
-  function closeModal() {
-    document.getElementById("custom-modal").style.display = "none";
-    modalCallback = null;
-  }
-
+  const closeModal = () => { document.getElementById("custom-modal").style.display = "none"; modalCallback = null; };
   document.getElementById("modal-btn-cancel").onclick = closeModal;
   document.getElementById("modal-btn-confirm").onclick = () => {
-    const inputValue = document.getElementById("modal-input").value;
-    if (modalCallback) modalCallback(inputValue);
+    const val = document.getElementById("modal-input").value;
+    if (modalCallback) modalCallback(val);
     closeModal();
   };
 
-  // Toast Animations and Custom Styles
-  const styleSheet = document.head.appendChild(document.createElement("style"));
-  styleSheet.innerText = `
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-    .btn-action-primary {
-      background: #001b4c; color: #ffde00; border: none; border-radius: 8px; padding: 1rem;
-      font-weight: 800; font-size: 1rem; width: 100%; cursor: pointer; transition: all 0.2s;
-      margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 1px;
-    }
-    .btn-action-primary:hover { background: #002e82; box-shadow: 0 4px 15px rgba(0,27,76,0.2); }
-    .btn-action-primary:disabled { opacity: 0.7; cursor: not-allowed; }
-
-    .btn-action-secondary {
-      background: #ffde00; color: #001b4c; border: none; border-radius: 6px; padding: 0.6rem 1.2rem;
-      font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
-    }
-    .btn-action-secondary:hover { background: #fff11f; }
-
-    .btn-past-edit { background: #001b4c; color: white; border: none; border-radius: 4px; padding: 5px 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .btn-past-edit:hover { background: #003697; }
-    .btn-past-delete { background: #e51e1e; color: white; border: none; border-radius: 4px; padding: 5px 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .btn-past-delete:hover { background: #ff3c3c; }
-    
-    .admin-label { display: block; font-size: 0.8rem; font-weight: 700; color: #001b4c; text-transform: uppercase; margin-bottom: 6px; }
-  `;
-
-  // --- UTILITY: DATE GENERATION ---
+  // --- CORE LOGIC ---
   window.updateDateStrings = () => {
-    const dateInput = document.getElementById("next-date-input").value;
-    if (!dateInput) return;
-    const date = new Date(dateInput);
+    const val = document.getElementById("next-date-input").value;
+    if (!val) return;
+    const date = new Date(val);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
@@ -315,24 +355,16 @@
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     let formatted = date.toLocaleDateString('en-GB', options);
     const d = date.getDate();
-    let suffix = "th";
-    if (d % 10 === 1 && d !== 11) suffix = "st";
-    else if (d % 10 === 2 && d !== 12) suffix = "nd";
-    else if (d % 10 === 3 && d !== 13) suffix = "rd";
+    let suffix = (d % 10 === 1 && d !== 11) ? "st" : (d % 10 === 2 && d !== 12) ? "nd" : (d % 10 === 3 && d !== 13) ? "rd" : "th";
     formatted = formatted.replace(String(d), d + suffix);
     document.getElementById("next-dateLetters").value = formatted;
   };
 
-  // --- LOAD NEXT CROSSING ---
   async function loadNextCrossing() {
-    const docRef = doc(db, "nextCrossing", "nextCrossing");
-    const snap = await getDoc(docRef);
+    const snap = await getDoc(doc(db, "nextCrossing", "nextCrossing"));
     if (snap.exists()) {
       const data = snap.data();
-      const routeSelect = document.getElementById("next-route");
-      if (data.Departure && data.Destination) {
-          routeSelect.value = `${data.Departure} - ${data.Destination}`;
-      }
+      if (data.Departure && data.Destination) document.getElementById("next-route").value = `${data.Departure} - ${data.Destination}`;
       document.getElementById("next-vessel").value = data.Vessel || "";
       document.getElementById("next-time").value = data.Time || "";
       document.getElementById("next-notes").value = data.Notes || "";
@@ -341,24 +373,15 @@
     }
   }
 
-  // --- SAVE NEXT CROSSING (WITH AUTO-HISTORY) ---
   window.saveNextCrossing = async () => {
+    const route = document.getElementById("next-route").value;
+    if (!route) { showNotification("Select a route first!", "error"); return; }
+    const [dep, dest] = route.split(" - ");
     const btn = document.getElementById("btn-save-next");
-    const routeValue = document.getElementById("next-route").value;
-
-    if (!routeValue) {
-        showNotification("Please select a route!", "error");
-        return;
-    }
-
-    const [departure, destination] = routeValue.split(" - ");
-    btn.disabled = true;
-    btn.innerText = "SAVING...";
-
+    btn.disabled = true; btn.innerText = "PUSHING DATA...";
     try {
       const data = {
-        Departure: departure,
-        Destination: destination,
+        Departure: dep, Destination: dest,
         Vessel: document.getElementById("next-vessel").value,
         Time: document.getElementById("next-time").value,
         Notes: document.getElementById("next-notes").value,
@@ -366,383 +389,56 @@
         dateLetters: document.getElementById("next-dateLetters").value,
         updatedAt: new Date().toISOString()
       };
-
       await setDoc(doc(db, "nextCrossing", "nextCrossing"), data);
-      await addDoc(collection(db, "pastCrossings"), {
-          ...data,
-          archiveMethod: "Automatic",
-          createdAt: new Date().toISOString()
-      });
-
-      showNotification("Live crossing updated and archived successfully!");
+      await addDoc(collection(db, "pastCrossings"), { ...data, archiveMethod: "Automatic", createdAt: new Date().toISOString() });
+      showNotification("Game Sync Successful! Departure updated & archived.");
       loadPastCrossings();
-    } catch (e) {
-      console.error(e);
-      showNotification("Error during save: " + e.message, "error");
-    } finally {
-      btn.disabled = false;
-      btn.innerText = "SAVE AND UPDATE IN-GAME";
-    }
+    } catch (e) { showNotification("Save Error: " + e.message, "error"); }
+    finally { btn.disabled = false; btn.innerText = "SAVE & PUSH TO GAME"; }
   };
 
-  // --- LOAD HISTORY ---
   async function loadPastCrossings() {
-    const container = document.getElementById("lista-past-crossings");
-    container.innerHTML = "<p style='color:#777; font-size:0.9rem;'>Syncing history archive...</p>";
+    const cont = document.getElementById("lista-past-crossings");
+    cont.innerHTML = "<p style='color:#aaa;'>Syncing archive...</p>";
     const q = query(collection(db, "pastCrossings"), orderBy("createdAt", "desc"));
-    const snapshot = await getDocs(q);
-    container.innerHTML = "";
-    if (snapshot.empty) {
-      container.innerHTML = "<p style='color:#777; font-size:0.9rem;'>No records in the history archive.</p>";
-      return;
-    }
-    snapshot.forEach(docu => {
-      const t = docu.data();
+    const snap = await getDocs(q);
+    cont.innerHTML = snap.empty ? "<p style='color:#aaa;'>Archive is empty.</p>" : "";
+    snap.forEach(d => {
+      const t = d.data();
       const div = document.createElement("div");
-      div.innerHTML = `
-      <div style="background:white; padding:1.5rem; margin-bottom:1rem; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.04); border-left: 6px solid #eef2f7; display: flex; justify-content: space-between; align-items: center;">
+      div.innerHTML = `<div style="background:white; padding:1.5rem; margin-bottom:1rem; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05); border-left: 6px solid #eef2f7; display: flex; justify-content: space-between; align-items: center;">
         <div>
-           <h3 style="color:#001b4c; margin-bottom: 0.4rem; font-weight: 800;">${t.Departure} → ${t.Destination}</h3>
-           <p style="font-size: 0.85rem; color: #555; margin-bottom: 4px;"><strong>Vessel:</strong> ${t.Vessel} | <strong>Time:</strong> ${t.Time}</p>
-           <p style="font-size: 0.85rem; color: #555;"><strong>Date:</strong> ${t.dateNumbers} <span style="color:#aaa; margin:0 5px;">•</span> ${t.Notes || "No notes"}</p>
+           <h3 style="color:var(--primary-blue); margin: 0 0 6px; font-weight: 800;">${t.Departure} → ${t.Destination}</h3>
+           <p style="font-size: 0.85rem; color: #555; margin:0 0 4px;"><strong>Ship:</strong> ${t.Vessel} | <strong>Time:</strong> ${t.Time}</p>
+           <p style="font-size: 0.85rem; color: #777; margin:0;"><strong>Date:</strong> ${t.dateNumbers} <span style="margin: 0 8px; opacity: 0.5;">|</span> ${t.Notes || "No notes"}</p>
         </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn-past-edit">EDIT NOTES</button>
-          <button class="btn-past-delete">DELETE</button>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-past-edit" onclick="openEditModal('${d.id}', '${t.Notes.replace(/'/g, "\\'")}')">EDIT NOTES</button>
+          <button class="btn-past-delete" onclick="confirmDelete('${d.id}')">DELETE</button>
         </div>
       </div>`;
-      
-      div.querySelector(".btn-past-edit").onclick = () => editPastCrossing(docu.id, t.Notes);
-      div.querySelector(".btn-past-delete").onclick = () => deletePastCrossing(docu.id);
-      
-      container.appendChild(div);
+      cont.appendChild(div);
     });
   }
 
-  // --- HISTORY ACTIONS ---
   window.addPastCrossing = async () => {
-     const routeValue = document.getElementById("next-route").value;
-     if (!routeValue) { showNotification("Please select a route first!", "error"); return; }
-     
-     const [departure, destination] = routeValue.split(" - ");
-     const currentData = {
-        Departure: departure,
-        Destination: destination,
-        Vessel: document.getElementById("next-vessel").value,
-        Time: document.getElementById("next-time").value,
-        Notes: document.getElementById("next-notes").value,
-        dateNumbers: document.getElementById("next-dateNumbers").value,
-        dateLetters: document.getElementById("next-dateLetters").value,
-        archiveMethod: "Manual",
-        createdAt: new Date().toISOString()
-     };
-     await addDoc(collection(db, "pastCrossings"), currentData);
-     showNotification("Record manually added to history.");
+     const route = document.getElementById("next-route").value;
+     if (!route) { showNotification("Select current data first!", "error"); return; }
+     const [dep, dest] = route.split(" - ");
+     await addDoc(collection(db, "pastCrossings"), {
+        Departure: dep, Destination: dest, Vessel: document.getElementById("next-vessel").value,
+        Time: document.getElementById("next-time").value, Notes: document.getElementById("next-notes").value,
+        dateNumbers: document.getElementById("next-dateNumbers").value, dateLetters: document.getElementById("next-dateLetters").value,
+        archiveMethod: "Manual", createdAt: new Date().toISOString()
+     });
+     showNotification("Manual Archive Successful.");
      loadPastCrossings();
   };
 
-  async function deletePastCrossing(id) {
-    openModal(
-        "Confirm Deletion", 
-        "Are you sure you want to permanently delete this record from the history? This action cannot be undone.",
-        "DELETE NOW",
-        async () => {
-            await deleteDoc(doc(db, "pastCrossings", id));
-            showNotification("Record deleted.");
-            loadPastCrossings();
-        }
-    );
-  }
+  window.confirmDelete = (id) => openModal("Confirm Deletion", "Are you sure? This cannot be undone.", "DELETE NOW", async () => { await deleteDoc(doc(db, "pastCrossings", id)); showNotification("Record purged."); loadPastCrossings(); });
+  window.openEditModal = (id, old) => openModal("Edit Record Notes", "Update the trip notes:", "SAVE CHANGES", async (n) => { await updateDoc(doc(db, "pastCrossings", id), { Notes: n }); showNotification("Notes updated."); loadPastCrossings(); }, true, old);
 
-  async function editPastCrossing(id, currentNotes) {
-    openModal(
-        "Edit Notes",
-        "Enter new notes for this crossing (e.g. '15 min delay'):",
-        "SAVE NOTES",
-        async (newNotes) => {
-            await updateDoc(doc(db, "pastCrossings", id), { Notes: newNotes });
-            showNotification("Notes updated successfully.");
-            loadPastCrossings();
-        },
-        true,
-        currentNotes
-    );
-  }
-
-  // Initial load check
   checkAuth();
-
 </script>
-
-<style>
-  .admin-input {
-    width: 100%;
-    padding: 0.8rem;
-    margin: 0.4rem 0 1rem;
-    border: 2px solid #eef2f7;
-    border-radius: 8px;
-    font-family: inherit;
-    box-sizing: border-box;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: border-color 0.2s;
-  }
-  .admin-input:focus {
-    border-color: #001b4c;
-    outline: none;
-  }
-</style>
-  // --- CUSTOM MODAL SYSTEM ---
-  let modalCallback = null;
-  function openModal(title, desc, confirmLabel, callback, showInput = false, initialInputValue = "") {
-    document.getElementById("modal-title").innerText = title;
-    document.getElementById("modal-desc").innerText = desc;
-    document.getElementById("modal-btn-confirm").innerText = confirmLabel;
-    
-    const inputContainer = document.getElementById("modal-input-container");
-    const inputField = document.getElementById("modal-input");
-    
-    if (showInput) {
-        inputContainer.style.display = "block";
-        inputField.value = initialInputValue;
-        inputField.focus();
-    } else {
-        inputContainer.style.display = "none";
-    }
-
-    modalCallback = callback;
-    document.getElementById("custom-modal").style.display = "flex";
-  }
-
-  function closeModal() {
-    document.getElementById("custom-modal").style.display = "none";
-    modalCallback = null;
-  }
-
-  document.getElementById("modal-btn-cancel").onclick = closeModal;
-  document.getElementById("modal-btn-confirm").onclick = () => {
-    const inputValue = document.getElementById("modal-input").value;
-    if (modalCallback) modalCallback(inputValue);
-    closeModal();
-  };
-
-  // Toast Animations and Custom Styles
-  const styleSheet = document.head.appendChild(document.createElement("style"));
-  styleSheet.innerText = `
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-    .btn-action-primary {
-      background: #001b4c; color: #ffde00; border: none; border-radius: 8px; padding: 1rem;
-      font-weight: 800; font-size: 1rem; width: 100%; cursor: pointer; transition: all 0.2s;
-      margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 1px;
-    }
-    .btn-action-primary:hover { background: #002e82; box-shadow: 0 4px 15px rgba(0,27,76,0.2); }
-    .btn-action-primary:disabled { opacity: 0.7; cursor: not-allowed; }
-
-    .btn-action-secondary {
-      background: #ffde00; color: #001b4c; border: none; border-radius: 6px; padding: 0.6rem 1.2rem;
-      font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
-    }
-    .btn-action-secondary:hover { background: #fff11f; }
-
-    .btn-past-edit { background: #001b4c; color: white; border: none; border-radius: 4px; padding: 5px 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .btn-past-edit:hover { background: #003697; }
-    .btn-past-delete { background: #e51e1e; color: white; border: none; border-radius: 4px; padding: 5px 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .btn-past-delete:hover { background: #ff3c3c; }
-    
-    .admin-label { display: block; font-size: 0.8rem; font-weight: 700; color: #001b4c; text-transform: uppercase; margin-bottom: 6px; }
-  `;
-
-  // --- UTILITY: DATE GENERATION ---
-  window.updateDateStrings = () => {
-    const dateInput = document.getElementById("next-date-input").value;
-    if (!dateInput) return;
-    const date = new Date(dateInput);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    document.getElementById("next-dateNumbers").value = `${day}/${month}/${year}`;
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    let formatted = date.toLocaleDateString('en-GB', options);
-    const d = date.getDate();
-    let suffix = "th";
-    if (d % 10 === 1 && d !== 11) suffix = "st";
-    else if (d % 10 === 2 && d !== 12) suffix = "nd";
-    else if (d % 10 === 3 && d !== 13) suffix = "rd";
-    formatted = formatted.replace(String(d), d + suffix);
-    document.getElementById("next-dateLetters").value = formatted;
-  };
-
-  // --- LOAD NEXT CROSSING ---
-  async function loadNextCrossing() {
-    const docRef = doc(db, "nextCrossing", "nextCrossing");
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-      const data = snap.data();
-      const routeSelect = document.getElementById("next-route");
-      if (data.Departure && data.Destination) {
-          routeSelect.value = `${data.Departure} - ${data.Destination}`;
-      }
-      document.getElementById("next-vessel").value = data.Vessel || "";
-      document.getElementById("next-time").value = data.Time || "";
-      document.getElementById("next-notes").value = data.Notes || "";
-      document.getElementById("next-dateNumbers").value = data.dateNumbers || "";
-      document.getElementById("next-dateLetters").value = data.dateLetters || "";
-    }
-  }
-
-  // --- SAVE NEXT CROSSING (WITH AUTO-HISTORY) ---
-  window.saveNextCrossing = async () => {
-    const btn = document.getElementById("btn-save-next");
-    const routeValue = document.getElementById("next-route").value;
-
-    if (!routeValue) {
-        showNotification("Please select a route!", "error");
-        return;
-    }
-
-    const [departure, destination] = routeValue.split(" - ");
-    btn.disabled = true;
-    btn.innerText = "SAVING...";
-
-    try {
-      const data = {
-        Departure: departure,
-        Destination: destination,
-        Vessel: document.getElementById("next-vessel").value,
-        Time: document.getElementById("next-time").value,
-        Notes: document.getElementById("next-notes").value,
-        dateNumbers: document.getElementById("next-dateNumbers").value,
-        dateLetters: document.getElementById("next-dateLetters").value,
-        updatedAt: new Date().toISOString()
-      };
-
-      await setDoc(doc(db, "nextCrossing", "nextCrossing"), data);
-      await addDoc(collection(db, "pastCrossings"), {
-          ...data,
-          archiveMethod: "Automatic",
-          createdAt: new Date().toISOString()
-      });
-
-      showNotification("Live crossing updated and archived successfully!");
-      loadPastCrossings();
-    } catch (e) {
-      console.error(e);
-      showNotification("Error during save: " + e.message, "error");
-    } finally {
-      btn.disabled = false;
-      btn.innerText = "SAVE AND UPDATE IN-GAME";
-    }
-  };
-
-  // --- LOAD HISTORY ---
-  async function loadPastCrossings() {
-    const container = document.getElementById("lista-past-crossings");
-    container.innerHTML = "<p style='color:#777; font-size:0.9rem;'>Syncing history archive...</p>";
-    const q = query(collection(db, "pastCrossings"), orderBy("createdAt", "desc"));
-    const snapshot = await getDocs(q);
-    container.innerHTML = "";
-    if (snapshot.empty) {
-      container.innerHTML = "<p style='color:#777; font-size:0.9rem;'>No records in the history archive.</p>";
-      return;
-    }
-    snapshot.forEach(docu => {
-      const t = docu.data();
-      const div = document.createElement("div");
-      div.innerHTML = `
-      <div style="background:white; padding:1.5rem; margin-bottom:1rem; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.04); border-left: 6px solid #eef2f7; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-           <h3 style="color:#001b4c; margin-bottom: 0.4rem; font-weight: 800;">${t.Departure} → ${t.Destination}</h3>
-           <p style="font-size: 0.85rem; color: #555; margin-bottom: 4px;"><strong>Vessel:</strong> ${t.Vessel} | <strong>Time:</strong> ${t.Time}</p>
-           <p style="font-size: 0.85rem; color: #555;"><strong>Date:</strong> ${t.dateNumbers} <span style="color:#aaa; margin:0 5px;">•</span> ${t.Notes || "No notes"}</p>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn-past-edit">EDIT NOTES</button>
-          <button class="btn-past-delete">DELETE</button>
-        </div>
-      </div>`;
-      
-      div.querySelector(".btn-past-edit").onclick = () => editPastCrossing(docu.id, t.Notes);
-      div.querySelector(".btn-past-delete").onclick = () => deletePastCrossing(docu.id);
-      
-      container.appendChild(div);
-    });
-  }
-
-  // --- HISTORY ACTIONS ---
-  window.addPastCrossing = async () => {
-     const routeValue = document.getElementById("next-route").value;
-     if (!routeValue) { showNotification("Please select a route first!", "error"); return; }
-     
-     const [departure, destination] = routeValue.split(" - ");
-     const currentData = {
-        Departure: departure,
-        Destination: destination,
-        Vessel: document.getElementById("next-vessel").value,
-        Time: document.getElementById("next-time").value,
-        Notes: document.getElementById("next-notes").value,
-        dateNumbers: document.getElementById("next-dateNumbers").value,
-        dateLetters: document.getElementById("next-dateLetters").value,
-        archiveMethod: "Manual",
-        createdAt: new Date().toISOString()
-     };
-     await addDoc(collection(db, "pastCrossings"), currentData);
-     showNotification("Record manually added to history.");
-     loadPastCrossings();
-  };
-
-  async function deletePastCrossing(id) {
-    openModal(
-        "Confirm Deletion", 
-        "Are you sure you want to permanently delete this record from the history? This action cannot be undone.",
-        "DELETE NOW",
-        async () => {
-            await deleteDoc(doc(db, "pastCrossings", id));
-            showNotification("Record deleted.");
-            loadPastCrossings();
-        }
-    );
-  }
-
-  async function editPastCrossing(id, currentNotes) {
-    openModal(
-        "Edit Notes",
-        "Enter new notes for this crossing (e.g. '15 min delay'):",
-        "SAVE NOTES",
-        async (newNotes) => {
-            await updateDoc(doc(db, "pastCrossings", id), { Notes: newNotes });
-            showNotification("Notes updated successfully.");
-            loadPastCrossings();
-        },
-        true,
-        currentNotes
-    );
-  }
-
-  // Initial load
-  loadNextCrossing();
-  loadPastCrossings();
-
-</script>
-
-<style>
-  .admin-input {
-    width: 100%;
-    padding: 0.8rem;
-    margin: 0.4rem 0 1rem;
-    border: 2px solid #eef2f7;
-    border-radius: 8px;
-    font-family: inherit;
-    box-sizing: border-box;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: border-color 0.2s;
-  }
-  .admin-input:focus {
-    border-color: #001b4c;
-    outline: none;
-  }
-</style>
-
 </body>
 </html>
