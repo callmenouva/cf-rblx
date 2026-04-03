@@ -242,9 +242,14 @@
       <img src="CorsicaFerriesGoYellow+RBLX.png" style="height: 60px; margin-bottom: 2rem;">
       <h1>Welcome to Corsica Ferries Booking</h1>
       <p>Please log in with your Roblox account to continue.</p>
-      <a href="https://robloxlogin-ag6pxylona-uc.a.run.app?action=booking" class="btn-roblox">
+      <a id="login-link-roblox" href="#" class="btn-roblox">
         <span>LOGIN WITH ROBLOX</span>
       </a>
+      <script>
+        const loginLink = document.getElementById('login-link-roblox');
+        const currentUrl = window.location.href.split('?')[0];
+        loginLink.href = `https://robloxlogin-ag6pxylona-uc.a.run.app?redirect=${encodeURIComponent(currentUrl)}`;
+      </script>
     </div>
   </div>
 
