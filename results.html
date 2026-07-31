@@ -238,21 +238,23 @@
 
   <!-- AUTH OVERLAY -->
   <div id="auth-overlay" class="auth-overlay">
-    <div>
-      <img src="CorsicaFerriesGoYellow+RBLX.png" style="height: 60px; margin-bottom: 2rem;">
-      <h1>Welcome to Corsica Ferries Booking</h1>
-      <p>Please log in with your Roblox account to continue.</p>
-      <a id="login-link-roblox" href="#" class="btn-roblox">
-        <span>LOGIN WITH ROBLOX</span>
-      </a>
-      <script>
-        const loginLink = document.getElementById('login-link-roblox');
-        const currentUrl = window.location.href.split('?')[0];
-        // NOTA: Sostituisci l'URL qui sotto con quello della tua funzione robloxLogin dopo il deploy
-        // Esempio: https://us-central1-cf-rblx-a9514.cloudfunctions.net/robloxLogin
-        const FUNCTIONS_BASE_URL = "https://us-central1-cf-fest.cloudfunctions.net"; 
-        loginLink.href = `${FUNCTIONS_BASE_URL}/robloxLoginRblx?redirect=${encodeURIComponent(currentUrl)}`;
-      </script>
+    <div style="background: white; color: var(--corsica-blue); padding: 2rem; border-radius: 8px; max-width: 400px; width: 90%;">
+      <img src="CorsicaFerriesGoYellow+RBLX.png" style="height: 60px; margin-bottom: 1rem;">
+      <h2 style="margin-top: 0;">Roblox Verification</h2>
+      
+      <div id="bio-auth-step-1">
+        <p style="font-size: 0.9rem; margin-bottom: 1rem;">Enter your Roblox Username to continue.</p>
+        <input type="text" id="roblox-username-input" placeholder="Roblox Username" style="width: 100%; padding: 10px; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit;">
+        <button id="btn-generate-code" class="btn-book" style="margin-top: 0; padding: 10px;">Generate Code</button>
+      </div>
+
+      <div id="bio-auth-step-2" style="display: none;">
+        <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Please place this code in your <strong>Roblox About (Bio)</strong>:</p>
+        <div id="generated-bio-code" style="background: #f4f7fa; border: 2px dashed #001b4c; padding: 1rem; font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 1rem;">CF-XXXXXX</div>
+        <p style="font-size: 0.8rem; color: #666; margin-bottom: 1rem;">After saving your Roblox profile, click verify below.</p>
+        <button id="btn-verify-code" class="btn-book" style="margin-top: 0; padding: 10px; background: #10b981; color: white;">Verify & Login</button>
+        <button id="btn-cancel-auth" style="margin-top: 10px; background: none; border: none; color: #666; text-decoration: underline; cursor: pointer;">Cancel</button>
+      </div>
     </div>
   </div>
 
@@ -338,24 +340,19 @@
 
         <!-- ACCOMMODATION -->
         <div class="card">
-          <div class="card-title">🛌 ACCOMMODATION <span id="loading-rank"></span></div>
-          <p style="font-size: 0.8rem; color: #555; margin-bottom: 1rem;">Options are unlocked based on your Roblox Group Rank.</p>
+          <div class="card-title">🛌 ACCOMMODATION</div>
           <div id="accommodation-list" class="accommodation-grid">
-             <div class="accommodation-item" data-value="standard">
-                <strong>Deck Passage</strong><br>
-                <small>Standard entry</small>
-             </div>
-             <div class="accommodation-item locked" data-value="poltrona" id="opt-poltrona">
+             <div class="accommodation-item selected" data-value="poltrona" id="opt-poltrona">
                 <strong>Poltrona (Seat)</strong><br>
-                <small>Rank 16+</small>
+                <small>Standard seating</small>
              </div>
-             <div class="accommodation-item locked" data-value="cabin" id="opt-cabin">
-                <strong>Standard Cabin</strong><br>
-                <small>Rank 20 Only</small>
+             <div class="accommodation-item" data-value="cabina interna" id="opt-cabin-interna">
+                <strong>Cabina Interna</strong><br>
+                <small>Inside Cabin</small>
              </div>
-             <div class="accommodation-item locked" data-value="suite" id="opt-suite">
-                <strong>Luxe Suite</strong><br>
-                <small>Special Rank (<40)</small>
+             <div class="accommodation-item" data-value="esterna" id="opt-cabin-esterna">
+                <strong>Cabina Esterna</strong><br>
+                <small>Outside Cabin / Porthole</small>
              </div>
           </div>
         </div>
@@ -417,111 +414,163 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAg5ModKG8Uc1Tsfv8KkZeC2n_P7Og66n8",
-      authDomain: "cf-fest.firebaseapp.com",
-      projectId: "cf-fest",
-      storageBucket: "cf-fest.firebasestorage.app",
-      messagingSenderId: "1016499778491",
-      appId: "1:1016499778491:web:6edb935bb5455578024a9e"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const functions = getFunctions(app, "us-central1");
-
-    const getGroupRank = httpsCallable(functions, 'getRobloxGroupRank');
-    const submitBooking = httpsCallable(functions, 'submitBooking');
+  <script>
+    const FUNCTIONS_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? "http://127.0.0.1:5001/corsica-app/us-central1"
+        : "https://us-central1-corsica-app.cloudfunctions.net";
 
     let currentUser = null;
-    let userRank = 0;
     let selectedCrossing = null;
     let counts = { adults: 1, children: 0, dogs: 0 };
-    let selectedAccommodation = 'standard';
+    let selectedAccommodation = 'poltrona';
+    let currentAuthUserId = null;
 
-    // --- CHECK FOR TOKEN IN URL (Back from Roblox) ---
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    if (token) {
-        signInWithCustomToken(auth, token).then(() => {
-            // Rimuovi il token dall'URL per pulizia
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }).catch(e => console.error("Token login failed", e));
+    // --- CHECK AUTH (Local Storage) ---
+    function checkAuth() {
+        const savedUser = localStorage.getItem('cf_roblox_oauth_user') || localStorage.getItem('cf_roblox_user');
+        if (savedUser) {
+            try {
+                currentUser = JSON.parse(savedUser);
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('user-profile').style.display = 'flex';
+                document.getElementById('user-name').textContent = currentUser.username || currentUser.displayName;
+                document.getElementById('user-rank').textContent = `Rank: Verified`;
+            } catch (e) {
+                console.error("Auth check failed", e);
+                document.getElementById('auth-overlay').style.display = 'flex';
+            }
+        } else {
+            document.getElementById('auth-overlay').style.display = 'flex';
+        }
     }
 
-    // --- CHECK AUTH ---
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        document.getElementById('auth-overlay').style.display = 'none';
-        currentUser = user;
-        document.getElementById('user-profile').style.display = 'flex';
-        document.getElementById('user-name').textContent = user.displayName;
+    // --- BIO VERIFICATION LOGIC ---
+    document.getElementById('btn-generate-code').onclick = async () => {
+        const username = document.getElementById('roblox-username-input').value.trim();
+        if (!username) return alert("Please enter a username.");
         
-        // Fetch rank
-        const robloxId = user.uid.split(':')[1];
-        if (robloxId) {
-            document.getElementById('loading-rank').textContent = "(Checking rank...)";
-            try {
-                const res = await getGroupRank({ userId: robloxId });
-                userRank = res.data.rank;
-                document.getElementById('user-rank').textContent = `Rank: ${userRank} (${res.data.roleName})`;
-                unlockAccommodations();
-            } catch (e) {
-                console.error("Rank fetch failed", e);
-            } finally {
-                document.getElementById('loading-rank').textContent = "";
+        const btn = document.getElementById('btn-generate-code');
+        btn.textContent = "Loading...";
+        btn.disabled = true;
+
+        try {
+            const res = await fetch(`${FUNCTIONS_BASE_URL}/generateBioAuthCode`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            });
+            const data = await res.json();
+            
+            if (res.ok && data.success) {
+                currentAuthUserId = data.userId;
+                document.getElementById('generated-bio-code').textContent = data.code;
+                document.getElementById('bio-auth-step-1').style.display = 'none';
+                document.getElementById('bio-auth-step-2').style.display = 'block';
+            } else {
+                alert("Error: " + (data.error || "Failed to generate code"));
             }
+        } catch (e) {
+            alert("Network error.");
+        } finally {
+            btn.textContent = "Generate Code";
+            btn.disabled = false;
         }
-      } else {
-        document.getElementById('auth-overlay').style.display = 'flex';
-      }
-    });
+    };
+
+    document.getElementById('btn-verify-code').onclick = async () => {
+        if (!currentAuthUserId) return;
+        const code = document.getElementById('generated-bio-code').textContent;
+        const btn = document.getElementById('btn-verify-code');
+        btn.textContent = "Verifying...";
+        btn.disabled = true;
+
+        try {
+            const res = await fetch(`${FUNCTIONS_BASE_URL}/verifyBioAuthCode`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentAuthUserId, code })
+            });
+            const data = await res.json();
+            
+            if (res.ok && data.success) {
+                localStorage.setItem('cf_roblox_user', JSON.stringify(data.user));
+                checkAuth();
+            } else {
+                alert("Verification failed: " + (data.error || "Code not found in bio. Make sure you save it."));
+            }
+        } catch (e) {
+            alert("Network error.");
+        } finally {
+            btn.textContent = "Verify & Login";
+            btn.disabled = false;
+        }
+    };
+
+    document.getElementById('btn-cancel-auth').onclick = () => {
+        document.getElementById('bio-auth-step-1').style.display = 'block';
+        document.getElementById('bio-auth-step-2').style.display = 'none';
+        currentAuthUserId = null;
+    };
 
     // --- LOAD CROSSINGS ---
     async function loadCrossings() {
-        const res = await fetch("traversate.json");
-        const data = await res.json();
-        const list = document.getElementById("crossing-list");
-        
-        data.traversate.forEach((t, i) => {
-            const div = document.createElement("div");
-            div.className = "radio-item";
-            div.innerHTML = `
-                <input type="radio" name="crossing" value="${i}">
-                <div>
-                   <strong>${t.rotta.it}</strong> (${t.ora})<br>
-                   <small>${t.nave} - ${t.data}</small>
-                </div>
-            `;
-            div.querySelector('input').onchange = () => {
-                selectedCrossing = t;
-                updateSummary();
-            };
-            list.appendChild(div);
-        });
+        try {
+            const res = await fetch(`${FUNCTIONS_BASE_URL}/getDiscordEvents`);
+            const data = await res.json();
+            const list = document.getElementById("crossing-list");
+            list.innerHTML = "";
+            
+            // Map the discord events
+            const scheduledCrossings = data.filter(c => c.status === 1 || c.status === 2).map(ev => {
+                let ship = ev.name.split('-')[0] || 'Ship';
+                let route = 'Unknown Route';
+                if (ev.description) {
+                    const vesselMatch = ev.description.match(/Vessel:\s*(.+)/i);
+                    if (vesselMatch) ship = vesselMatch[1].trim();
+                    const routeMatch = ev.description.match(/Route:\s*(.+)/i);
+                    if (routeMatch) route = routeMatch[1].trim();
+                }
+                const depDate = new Date(ev.scheduledStartTime || ev.scheduled_start_time);
+                
+                return {
+                    id: ev.id,
+                    name: ev.name,
+                    ship: ship,
+                    route: route,
+                    departureTime: ev.scheduledStartTime || ev.scheduled_start_time,
+                    dateStr: depDate.toLocaleDateString(),
+                    timeStr: depDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                };
+            });
+
+            if (scheduledCrossings.length === 0) {
+                list.innerHTML = "<p>No upcoming crossings found.</p>";
+                return;
+            }
+
+            scheduledCrossings.forEach((t, i) => {
+                const div = document.createElement("div");
+                div.className = "radio-item";
+                div.innerHTML = `
+                    <input type="radio" name="crossing" value="${t.id}">
+                    <div>
+                       <strong>${t.route}</strong> (${t.timeStr})<br>
+                       <small>${t.ship} - ${t.dateStr}</small>
+                    </div>
+                `;
+                div.querySelector('input').onchange = () => {
+                    selectedCrossing = t;
+                    updateSummary();
+                };
+                list.appendChild(div);
+            });
+        } catch (e) {
+            console.error("Failed to load crossings", e);
+            document.getElementById("crossing-list").innerHTML = "<p>Failed to load crossings.</p>";
+        }
     }
 
     // --- LOGIC ---
-    function unlockAccommodations() {
-        const poltrona = document.getElementById('opt-poltrona');
-        const cabin = document.getElementById('opt-cabin');
-        const suite = document.getElementById('opt-suite');
-
-        // Logic as requested:
-        // rank > 15 -> poltrona
-        // rank == 20 -> cabin
-        // rank < 40 -> suite
-        
-        if (userRank > 15) poltrona.classList.remove('locked');
-        if (userRank == 20) cabin.classList.remove('locked');
-        if (userRank < 40 && userRank > 0) suite.classList.remove('locked');
-    }
-
     window.changeCount = (type, diff) => {
         counts[type] = Math.max(0, counts[type] + diff);
         if (type === 'adults') counts.adults = Math.max(1, counts.adults);
@@ -531,10 +580,6 @@
 
     document.querySelectorAll('.accommodation-item').forEach(item => {
         item.onclick = () => {
-            if (item.classList.contains('locked')) {
-                alert("Rank too low for this option!");
-                return;
-            }
             document.querySelectorAll('.accommodation-item').forEach(el => el.classList.remove('selected'));
             item.classList.add('selected');
             selectedAccommodation = item.dataset.value;
@@ -544,7 +589,7 @@
 
     function updateSummary() {
         if (selectedCrossing) {
-            document.getElementById('sum-crossing').textContent = selectedCrossing.rotta.it;
+            document.getElementById('sum-crossing').textContent = selectedCrossing.route;
         }
 
         const totalPasseggeri = counts.adults + counts.children;
@@ -555,12 +600,11 @@
 
         document.getElementById('sum-accommodation').textContent = selectedAccommodation.toUpperCase();
 
-        // Basic "Fake" pricing for realism
         let total = (counts.adults * 25) + (counts.children * 15) + (counts.dogs * 10);
         if (vehicle !== 'none') total += 40;
         if (selectedAccommodation === 'poltrona') total += 10;
-        if (selectedAccommodation === 'cabin') total += 50;
-        if (selectedAccommodation === 'suite') total += 120;
+        if (selectedAccommodation === 'cabina interna') total += 50;
+        if (selectedAccommodation === 'esterna') total += 60;
 
         document.getElementById('total-price').textContent = `${total.toFixed(2)}€`;
         document.getElementById('price-passengers').textContent = `${((counts.adults * 25) + (counts.children * 15)).toFixed(2)}€`;
@@ -568,34 +612,59 @@
 
     document.getElementById('btn-submit-booking').onclick = async () => {
         if (!selectedCrossing) return alert("Select a crossing!");
+        if (!currentUser) return alert("You are not logged in!");
         
-        const bookingCode = "CF-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        const btn = document.getElementById('btn-submit-booking');
+        btn.textContent = "Booking...";
+        btn.disabled = true;
+
+        const services = [];
+        const wifi = document.getElementById('service-wifi').value;
+        if (wifi !== 'none') services.push(`Wi-Fi: ${wifi}`);
+        const food = document.getElementById('service-food').value;
+        if (food !== 'none') services.push(`Food: ${food}`);
+
+        const vehicle = document.querySelector('input[name="vehicle"]:checked').value;
+        const totalStr = document.getElementById('total-price').textContent.replace('€', '');
         
         const bookingData = {
-            robloxId: currentUser.uid.split(':')[1],
-            robloxUsername: currentUser.displayName,
-            crossing: selectedCrossing,
-            passengers: counts,
-            vehicle: document.querySelector('input[name="vehicle"]:checked').value,
+            userId: currentUser.userId,
+            username: currentUser.username,
+            crossingId: selectedCrossing.id,
+            ship: selectedCrossing.ship,
+            route: selectedCrossing.route,
+            departureTime: selectedCrossing.departureTime,
+            vehicle: vehicle === 'none' ? 'None' : vehicle,
             accommodation: selectedAccommodation,
-            services: {
-                wifi: document.getElementById('service-wifi').value,
-                food: document.getElementById('service-food').value
-            },
-            bookingCode: bookingCode,
-            createdAt: new Date().toISOString(),
-            status: "Pending"
+            passengers: { adults: counts.adults, children: counts.children, dogs: counts.dogs, pets: 0 },
+            services: services,
+            tariff: "Standard",
+            price: parseFloat(totalStr)
         };
 
         try {
-            await submitBooking(bookingData);
-            alert(`BOOKING SUCCESSFUL!\nCode: ${bookingCode}`);
-            window.location.reload();
+            const res = await fetch(`${FUNCTIONS_BASE_URL}/createBooking`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bookingData)
+            });
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+                alert(`BOOKING SUCCESSFUL!\nCode: ${data.bookingCode}`);
+                window.location.reload();
+            } else {
+                alert("Error saving booking: " + (data.error || "Unknown error"));
+            }
         } catch (e) {
-            alert("Error saving booking: " + e.message);
+            alert("Network Error saving booking: " + e.message);
+        } finally {
+            btn.textContent = "BOOK NOW";
+            btn.disabled = false;
         }
     };
 
+    checkAuth();
     loadCrossings();
     document.querySelectorAll('input[name="vehicle"]').forEach(input => input.onchange = updateSummary);
   </script>
